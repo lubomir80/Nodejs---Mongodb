@@ -15,6 +15,8 @@ app.use((error, req, res, next) => {
    res.status(500).json({ message: error.message })
 });
 
+
+
 const start = async () => {
    try {
       await connectMongo()
@@ -24,7 +26,7 @@ const start = async () => {
          console.log(`Server works at port ${PORT}`);
       })
    } catch (error) {
-      console.error(`Error to lounch, ${error.message}`);
+      console.error(`Error to launch, ${error.message}`);
    }
 }
 

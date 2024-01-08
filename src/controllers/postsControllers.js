@@ -1,15 +1,14 @@
-const mongodb = require("mongodb");
-const { ObjectId } = mongodb;
+const { Post } = require("../db/postModel")
 
 
-async function getPosts(req, res) {
-   const posts = await req.db.Posts.find().toArray()
+async function getPosts(_, res) {
+   const posts = await Post.find()
    return res.status(200).json({ posts })
 }
 
 async function getPostsById(req, res) {
    const { id } = req.params
-   const post = await req.db.Posts.findOne({ _id: new ObjectId(id) })
+   const post = await Post.findById(id)
    if (!post) res.status(400).json({ status: `failure, no post with ${id}` })
    return res.json({ post, status: "success" })
 }
@@ -20,7 +19,9 @@ async function addPost(req, res) {
       text
    } = req.body
 
-   await req.db.Posts.insertOne({ topic, text })
+   const post = new Post({ topic, text });
+   await post.save();
+
    res.json({ status: "success" })
 }
 
@@ -28,18 +29,16 @@ async function editPost(req, res) {
    const { id } = req.params;
    const { topic, text } = req.body
 
-   await req.db.Posts.updateOne(
-      { _id: new ObjectId(id) }
-      , { $set: { topic, text } }
+   await Post.findByIdAndUpdate(
+      id, { $set: { topic, text } }
    );
    res.json({ status: "success" })
 }
 
 async function deletePost(req, res) {
    const { id } = req.params
-   const { deletedCount } = await req.db.Posts.deleteOne({ _id: new ObjectId(id) })
-   deletedCount === 1 ? res.json({ status: "success" }) : res.json({ status: `Not have contact ${id}` })
-
+   await Post.findOneAndDelete(id)
+   res.json({ status: "success" })
 }
 
 module.exports = {

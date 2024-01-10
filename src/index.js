@@ -1,7 +1,8 @@
 require("dotenv").config()
 const express = require("express");
 const { connectMongo } = require("./db/connection");
-const { postsRouter } = require("./Routers/postsRouter")
+const { postsRouter } = require("./Routers/postsRouter");
+const { errorHandler } = require("./helpers/apiHelpers");
 
 const app = express();
 
@@ -10,10 +11,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use("/api/posts", postsRouter);
-
-app.use((error, req, res, next) => {
-   res.status(500).json({ message: error.message })
-});
+app.use(errorHandler);
 
 
 

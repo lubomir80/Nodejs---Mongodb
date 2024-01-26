@@ -2,6 +2,7 @@ require("dotenv").config()
 const express = require("express");
 const { connectMongo } = require("./db/connection");
 const { postsRouter } = require("./Routers/postsRouter");
+const { authRouter } = require("./Routers/authRouter");
 const { errorHandler } = require("./helpers/apiHelpers");
 
 const app = express();
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use("/api/posts", postsRouter);
+app.use("/api/auth", authRouter);
 app.use(errorHandler);
 
 

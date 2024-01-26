@@ -20,8 +20,7 @@ const start = async () => {
       await connectMongo()
 
       app.listen(PORT, (err) => {
-         if (err) console.error("Error at the server lanuch", err);
-         console.log(`Server works at port ${PORT}`);
+         if (err) console.log(`Server works at port ${PORT}`);
       })
    } catch (error) {
       console.error(`Error to launch, ${error.message}`);

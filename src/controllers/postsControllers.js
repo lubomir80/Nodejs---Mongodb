@@ -9,7 +9,7 @@ const {
 
 
 async function getPostsController(_, res) {
-   const posts = await getPosts()
+   const posts = await getPosts();
    return res.status(200).json({ posts, status: "success" })
 }
 

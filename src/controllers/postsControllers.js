@@ -8,8 +8,13 @@ const {
 } = require("../services/postsService")
 
 
-async function getPostsController(_, res) {
-   const posts = await getPosts();
+async function getPostsController(req, res) {
+   const {
+      _id
+   } = req.user;
+
+
+   const posts = await getPosts(_id);
    return res.status(200).json({ posts, status: "success" })
 }
 
@@ -24,8 +29,11 @@ async function addPostController(req, res) {
       topic,
       text
    } = req.body
+   const {
+      _id
+   } = req.user;
 
-   await addPost({ topic, text })
+   await addPost({ topic, text }, _id)
    res.json({ status: "success" })
 }
 

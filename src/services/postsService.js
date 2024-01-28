@@ -1,8 +1,8 @@
 const { Post } = require("../db/postModel");
 const { WrongParamError } = require("../helpers/errors")
 
-async function getPosts() {
-   const posts = await Post.find()
+async function getPosts(userId) {
+   const posts = await Post.find({ userId })
    return posts
 };
 
@@ -12,8 +12,8 @@ async function getPostById(id) {
    return post
 };
 
-async function addPost({ topic, text }) {
-   const post = new Post({ topic, text });
+async function addPost({ topic, text }, userId) {
+   const post = new Post({ topic, text, userId });
    await post.save();
 };
 

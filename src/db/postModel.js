@@ -7,6 +7,10 @@ const postSchema = new Schema({
       require: true,
       unique: true
    },
+   userId: {
+      type: String,
+      unique: true
+   },
    text: {
       type: String,
       require: true,

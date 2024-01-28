@@ -3,7 +3,11 @@ const router = express.Router();
 const {
    addPostValidation,
    putPostValidation
-} = require("../middlewares/validationMiddlewate.js")
+} = require("../middlewares/validationMiddleware.js")
+const {
+   authMiddleware
+} = require("../middlewares/authMiddleware.js")
+
 const {
    getPostsController,
    getPostsByIdController,
@@ -14,8 +18,8 @@ const {
 const { asyncWrapper } = require("../helpers/apiHelpers.js")
 
 
-
-
+router.use(authMiddleware)
+// add privat router - return token
 router.get("/", asyncWrapper(getPostsController));
 router.get("/:id", asyncWrapper(getPostsByIdController));
 router.post("/", addPostValidation, asyncWrapper(addPostController));

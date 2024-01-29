@@ -9,8 +9,7 @@ const asyncWrapper = (controller) => {
 }
 
 const errorHandler = (error, req, res, next) => {
-   if (error instanceof ValidationError ||
-      error instanceof WrongParamError) {
+   if (error instanceof Nodejs26ErrorError) {
       return res.status(error.status)
    }
    res.status(500).json({ message: error.message })

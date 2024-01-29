@@ -23,8 +23,8 @@ router.use(authMiddleware)
 router.get("/", asyncWrapper(getPostsController));
 router.get("/:id", asyncWrapper(getPostsByIdController));
 router.post("/", addPostValidation, asyncWrapper(addPostController));
-router.put("/:id", putPostValidation, asyncWrapper(changePostByIdController))
+// router.put("/:id", putPostValidation, asyncWrapper(changePostByIdController))
 router.delete("/:id", asyncWrapper(deletePostController))
-
+router.put("/:id", asyncWrapper(changePostByIdController))
 
 module.exports = { postsRouter: router };

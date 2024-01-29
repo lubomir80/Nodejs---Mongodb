@@ -2,13 +2,14 @@ const jwt = require("jsonwebtoken");
 const { NotAuthorizedError } = require("../helpers/errors");
 
 const authMiddleware = (req, res, next) => {
-   const [tokenType, token] = req.headers["authorization"].split(" ");
-
-   if (!token) {
-      next(new NotAuthorizedError("Please, provide a token"))
-   }
-
    try {
+      // TODO:validate token type later
+      const [tokenType, token] = req.headers["authorization"].split(" ");
+
+      if (!token) {
+         next(new NotAuthorizedError("Please, provide a token"))
+      }
+
       const user = jwt.decode(token, process.env.JWT_SECRET)
       req.user = user;
       req.token = token;

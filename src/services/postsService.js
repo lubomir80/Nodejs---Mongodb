@@ -6,9 +6,14 @@ async function getPosts(userId) {
    return posts
 };
 
-async function getPostById(id) {
-   const post = await Post.findById(id)
-   if (!post) throw new WrongParamError(`failure, no post with ${id}`);
+async function getPostById(postId, userId) {
+   const post = await Post.findOne({ _id: postId, userId })
+
+   // ERROR with inccorect ID.....Fix
+
+   if (!post) {
+      throw new WrongParamError(`failure, no post with ${postId}`)
+   }
    return post
 };
 
@@ -17,15 +22,15 @@ async function addPost({ topic, text }, userId) {
    await post.save();
 };
 
-async function changePostById(id, { topic, text }) {
-   await Post.findByIdAndUpdate(
-      id, { $set: { topic, text } }
+async function changePostById(postId, { topic, text }, userId) {
+   await Post.findOneAndUpdate(
+      { _id: postId, userId }, { $set: { topic, text } }
    );
 };
 
 
-async function deletePost(id) {
-   await Post.findOneAndDelete(id);
+async function deletePost(postId, userId) {
+   await Post.findOneAndDelete({ _id: postId, userId });
 };
 
 module.exports = {

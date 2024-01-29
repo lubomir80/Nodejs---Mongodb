@@ -5,21 +5,21 @@ class Nodejs26ErrorError extends Error {
    }
 }
 
-class ValidationError extends Error {
+class ValidationError extends Nodejs26ErrorError {
    constructor(message) {
       super(message);
       this.status = 400;
    }
 }
 
-class WrongParamError extends Error {
+class WrongParamError extends Nodejs26ErrorError {
    constructor(message) {
       super(message);
       this.status = 400;
    }
 }
 
-class NotAuthorizedError extends Error {
+class NotAuthorizedError extends Nodejs26ErrorError {
    constructor(message) {
       super(message);
       this.status = 401;

@@ -1,18 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const { addPostValidation, putPostValidation } = require("../middlewares/validationMiddlewate.js")
-const { getPosts, getPostsById, addPost, editPost, deletePost } = require("../controllers/postsControllers.js")
-const modelsMiddleware = require("../middlewares/models.js")
+const {
+   addPostValidation,
+   putPostValidation
+} = require("../middlewares/validationMiddleware.js")
+const {
+   authMiddleware
+} = require("../middlewares/authMiddleware.js")
+
+const {
+   getPostsController,
+   getPostsByIdController,
+   addPostController,
+   changePostByIdController,
+   deletePostController
+} = require("../controllers/postsControllers.js")
 const { asyncWrapper } = require("../helpers/apiHelpers.js")
 
 
-router.use(modelsMiddleware);
-
-router.get("/", asyncWrapper(getPosts));
-router.get("/:id", asyncWrapper(getPostsById));
-router.post("/", addPostValidation, asyncWrapper(addPost));
-router.put("/:id", putPostValidation, asyncWrapper(editPost))
-router.delete("/:id", asyncWrapper(deletePost))
-
+router.use(authMiddleware)
+// add privat router - return token
+router.get("/", asyncWrapper(getPostsController));
+router.get("/:id", asyncWrapper(getPostsByIdController));
+router.post("/", addPostValidation, asyncWrapper(addPostController));
+// router.put("/:id", putPostValidation, asyncWrapper(changePostByIdController))
+router.delete("/:id", asyncWrapper(deletePostController))
+router.put("/:id", asyncWrapper(changePostByIdController))
 
 module.exports = { postsRouter: router };

@@ -1,51 +1,57 @@
-const mongodb = require("mongodb");
-const { ObjectId } = mongodb;
+const {
+   getPosts,
+   getPostById,
+   addPost,
+   changePostById,
+   deletePost
+} = require("../services/postsService")
 
 
-async function getPosts(req, res) {
-   const posts = await req.db.Posts.find().toArray()
-   return res.status(200).json({ posts })
+async function getPostsController(req, res) {
+   const { _id: userId } = req.user
+
+   const posts = await getPosts(userId);
+   return res.status(200).json({ posts, status: "success" })
 }
 
-async function getPostsById(req, res) {
-   const { id } = req.params
-   const post = await req.db.Posts.findOne({ _id: new ObjectId(id) })
-   if (!post) res.status(400).json({ status: `failure, no post with ${id}` })
+async function getPostsByIdController(req, res) {
+   const { id: postId } = req.params
+   const { _id: userId } = req.user
+
+   const post = await getPostById(postId, userId)
    return res.json({ post, status: "success" })
 }
 
-async function addPost(req, res) {
-   const {
-      topic,
-      text
-   } = req.body
-
-   await req.db.Posts.insertOne({ topic, text })
-   res.json({ status: "success" })
-}
-
-async function editPost(req, res) {
-   const { id } = req.params;
+async function addPostController(req, res) {
    const { topic, text } = req.body
+   const { _id: userId } = req.user
 
-   await req.db.Posts.updateOne(
-      { _id: new ObjectId(id) }
-      , { $set: { topic, text } }
-   );
+   await addPost({ topic, text }, userId)
    res.json({ status: "success" })
 }
 
-async function deletePost(req, res) {
-   const { id } = req.params
-   const { deletedCount } = await req.db.Posts.deleteOne({ _id: new ObjectId(id) })
-   deletedCount === 1 ? res.json({ status: "success" }) : res.json({ status: `Not have contact ${id}` })
+async function changePostByIdController(req, res) {
 
+   const { topic, text } = req.body
+   const { id: postId } = req.params
+   const { _id: userId } = req.user
+
+   await changePostById(postId, { topic, text }, userId)
+   res.json({ status: "success" })
+}
+
+async function deletePostController(req, res) {
+   const { id: postId } = req.params
+   const { _id: userId } = req.user
+
+   await deletePost(postId, userId)
+   res.json({ status: "success" })
 }
 
 module.exports = {
-   getPosts,
-   getPostsById,
-   addPost,
-   editPost,
-   deletePost
+   getPostsController,
+   getPostsByIdController,
+   addPostController,
+   changePostByIdController,
+   deletePostController
 }

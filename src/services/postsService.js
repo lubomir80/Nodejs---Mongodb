@@ -1,8 +1,10 @@
 const { Post } = require("../db/postModel");
 const { WrongParamError } = require("../helpers/errors")
 
-async function getPosts(userId) {
+async function getPosts(userId, { skip, limit }) {
    const posts = await Post.find({ userId })
+      .select({ __v: 0 })
+      .skip(skip).limit(limit)
    return posts
 };
 

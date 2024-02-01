@@ -8,10 +8,17 @@ const {
 
 
 async function getPostsController(req, res) {
-   const { _id: userId } = req.user
+   const { _id: userId } = req.user;
 
-   const posts = await getPosts(userId);
-   return res.status(200).json({ posts, status: "success" })
+   let {
+      skip = 0,
+      limit = 5
+   } = req.query
+
+   limit = limit > 10 ? 10 : limit
+
+   const posts = await getPosts(userId, { skip, limit });
+   return res.status(200).json({ posts, status: "success", skip, limit })
 }
 
 async function getPostsByIdController(req, res) {
